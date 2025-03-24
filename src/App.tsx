@@ -10,6 +10,8 @@ import { getPeople } from './api/people';
 
 export const App = () => {
   const [people, setPeople] = useState<Array<Person> | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -17,10 +19,18 @@ export const App = () => {
       return;
     }
 
-    const fetchPeople = async () => {
-      const data = await getPeople();
+    setIsLoading(true);
 
-      setPeople(data);
+    const fetchPeople = async () => {
+      try {
+        const data = await getPeople();
+
+        setPeople(data);
+      } catch {
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchPeople();
@@ -30,8 +40,19 @@ export const App = () => {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
-        <Route path="/people" element={<PeoplePage people={people} />} />
-        <Route path="/home" element={<Navigate to="/" replace />} />
+        <Route
+          path="people"
+          element={
+            <PeoplePage
+              people={people}
+              isLoading={isLoading}
+              hasError={hasError}
+            />
+          }
+        >
+          <Route path=":slug" />
+        </Route>
+        <Route path="home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

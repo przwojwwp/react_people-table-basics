@@ -3,23 +3,28 @@ import { Person } from '../../types';
 
 interface Props {
   people: Person[] | null;
+  isLoading: boolean;
+  hasError: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const PeoplePage = ({ people }: Props) => {
+export const PeoplePage = ({ people, isLoading, hasError }: Props) => {
   return (
     <>
       <h1 className="title">People Page</h1>
 
       <div className="block">
         <div className="box table-container">
-          <Loader />
+          {isLoading && <Loader />}
 
-          <p data-cy="peopleLoadingError" className="has-text-danger">
-            Something went wrong
-          </p>
+          {hasError && (
+            <p data-cy="peopleLoadingError" className="has-text-danger">
+              Something went wrong
+            </p>
+          )}
 
-          <p data-cy="noPeopleMessage">There are no people on the server</p>
+          {people?.length === 0 && (
+            <p data-cy="noPeopleMessage">There are no people on the server</p>
+          )}
 
           <table
             data-cy="peopleTable"
@@ -37,19 +42,23 @@ export const PeoplePage = ({ people }: Props) => {
             </thead>
 
             <tbody>
-              <tr data-cy="person">
-                <td>
-                  <a href="#/people/jan-van-brussel-1714">Jan van Brussel</a>
-                </td>
+              {people?.map(person => {
+                return (
+                  <tr key={person.slug} data-cy="person">
+                    <td>
+                      <a href={`#/people/${person.slug}`}>{person.name}</a>
+                    </td>
 
-                <td>m</td>
-                <td>1714</td>
-                <td>1748</td>
-                <td>Joanna van Rooten</td>
-                <td>Jacobus van Brussel</td>
-              </tr>
+                    <td>{person.sex}</td>
+                    <td>{person.born}</td>
+                    <td>{person.died}</td>
+                    <td>{person.fatherName || '-'}</td>
+                    <td>{person.motherName || '-'}</td>
+                  </tr>
+                );
+              })}
 
-              <tr data-cy="person">
+              {/* <tr data-cy="person">
                 <td>
                   <a href="#/people/philibert-haverbeke-1907">
                     Philibert Haverbeke
@@ -135,7 +144,7 @@ export const PeoplePage = ({ people }: Props) => {
                     Lieven de Causmaecker
                   </a>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>

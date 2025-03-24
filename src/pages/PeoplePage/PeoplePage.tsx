@@ -1,6 +1,12 @@
-import { Loader } from '../Loader';
+import { Loader } from '../../components/Loader';
+import { Person } from '../../types';
 
-export const PeoplePage = () => {
+interface Props {
+  people: Person[] | null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const PeoplePage = ({ people }: Props) => {
   return (
     <>
       <h1 className="title">People Page</h1>

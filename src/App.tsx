@@ -15,7 +15,7 @@ export const App = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (pathname !== '/people') {
+    if (!pathname.startsWith('/people')) {
       return;
     }
 
@@ -50,7 +50,16 @@ export const App = () => {
             />
           }
         >
-          <Route path=":slug" element={null} />
+          <Route
+            path=":slug"
+            element={
+              <PeopleTable
+                people={people}
+                isLoading={isLoading}
+                hasError={hasError}
+              />
+            }
+          />
         </Route>
         <Route path="home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFoundPage />} />

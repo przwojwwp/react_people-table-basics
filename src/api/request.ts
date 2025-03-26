@@ -1,5 +1,9 @@
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
+function wait(delay: number) {
+  return new Promise(resolve => setTimeout(resolve, delay));
+}
+
 export const request = async <T, TData = unknown>(
   url: string,
   method: RequestMethod = 'GET',
@@ -13,6 +17,8 @@ export const request = async <T, TData = unknown>(
       'Content-Type': 'application/json; charset=UTF-8',
     };
   }
+
+  await wait(500);
 
   const response = await fetch(url, options);
 

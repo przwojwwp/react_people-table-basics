@@ -49,18 +49,18 @@ export const App = () => {
               hasError={hasError}
             />
           }
-        >
-          <Route
-            path=":slug"
-            element={
-              <PeopleTable
-                people={people}
-                isLoading={isLoading}
-                hasError={hasError}
-              />
-            }
-          />
-        </Route>
+        />
+        <Route
+          path="people/:slug"
+          element={
+            <PeopleTable
+              people={people}
+              isLoading={isLoading}
+              hasError={hasError}
+            />
+          }
+        />
+
         <Route path="home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
